@@ -1,0 +1,65 @@
+@model CourseProgressViewModel
+
+@{
+    ViewData["Title"] = "Course Progress";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h2>Your Progress for @Model.Course.Title</h2>
+    
+    <div class="progress-overview mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Overall Progress</h5>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @Model.CompletionPercentage%;" 
+                         aria-valuenow="@Model.CompletionPercentage" aria-valuemin="0" aria-valuemax="100">
+                        @Model.CompletionPercentage.ToString("F1")%
+                    </div>
+                </div>
+                <p class="mt-2">Completed @Model.CompletedLessons out of @Model.TotalLessons lessons</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="lessons-progress">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>Course Lessons</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var lesson in Model.Lessons)
+                    {
+                        var isCompleted = Model.CompletedLessonIds.Contains(lesson.Id);
+                        
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@lesson.Title</strong>
+                                @if (!string.IsNullOrEmpty(lesson.VideoUrl))
+                                {
+                                    <br><small class="text-muted">Video Lesson</small>
+                                }
+                            </div>
+                            @if (isCompleted)
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pending</span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="@Url.Action("Details", "Course", new { id = Model.Course.Id })" class="btn btn-primary">
+            Back to Course
+        </a>
+    </div>
+</div>

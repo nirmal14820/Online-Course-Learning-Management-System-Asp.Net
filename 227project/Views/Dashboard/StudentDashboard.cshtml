@@ -1,0 +1,187 @@
+@model StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt me-2"></i>Student Dashboard</h2>
+        <p class="text-muted">Welcome back! Here's your learning progress.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>@Model.EnrolledCourses</h4>
+                        <p class="mb-0">Enrolled Courses</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-book fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>@Model.CompletedLessons</h4>
+                        <p class="mb-0">Completed Lessons</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>@(Model.TotalLessons > 0 ? Math.Round((double)Model.CompletedLessons / Model.TotalLessons * 100, 1) : 0)%</h4>
+                        <p class="mb-0">Overall Progress</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-chart-pie fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>My Courses</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Enrollments.Any())
+                {
+                    @foreach (var enrollment in Model.Enrollments.Take(5))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-1">@enrollment.Course.Title</h6>
+                                <small class="text-muted">@enrollment.Course.Category</small>
+                            </div>
+                            <div class="text-end">
+                                <a asp-controller="Course" asp-action="Details" asp-route-id="@enrollment.Course.Id" class="btn btn-sm btn-outline-primary">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    <div class="text-center">
+                        <a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary">View All Courses</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-book fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">You haven't enrolled in any courses yet.</p>
+                        <a asp-controller="Course" asp-action="Index" class="btn btn-primary">Browse Courses</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Quiz Scores</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.QuizScores.Any())
+                {
+                    @foreach (var quiz in Model.QuizScores.Take(5))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-1">@quiz.Quiz.Title</h6>
+                                <small class="text-muted">@quiz.Quiz.Course.Title</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-info">@quiz.Score%</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-question-circle fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">No quiz attempts yet.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-question-circle me-2"></i>Quiz Scores</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.QuizScores.Any())
+                {
+                    @foreach (var quiz in Model.QuizScores.Take(5))
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6 class="mb-1">@quiz.Quiz.Title</h6>
+                                <small class="text-muted">@quiz.Quiz.Course.Title</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-info">@quiz.Score%</span>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-3">
+                        <i class="fas fa-question-circle fa-2x text-muted mb-2"></i>
+                        <p class="text-muted">No quiz attempts yet.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-controller="Course" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="fas fa-search me-2"></i>Browse Courses
+                    </a>
+                    <a asp-controller="Quiz" asp-action="Index" class="btn btn-outline-info">
+                        <i class="fas fa-question-circle me-2"></i>Take Quizzes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

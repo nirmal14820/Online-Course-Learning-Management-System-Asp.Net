@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "Learning Management System";
+}
+
+<!-- Hero Section with Background Image -->
+<div class="hero-section position-relative text-white py-5 mb-5" style="background: linear-gradient(rgba(0,123,255,0.8), rgba(221, 227, 235, 0.8)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=600&fit=crop'); background-size: cover; background-position: center;">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Welcome to LMS</h1>
+                <p class="lead mb-4">Your comprehensive Learning Management System for online education. Access courses, take quizzes, and track your progress.</p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&h=400&fit=crop" alt="Modern Online Learning" class="img-fluid rounded shadow-lg" style="max-height: 400px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h2 class="mb-4">Why Choose Our LMS?</h2>
+            <p class="text-muted lead">Everything you need for effective online learning</p>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=200&fit=crop" alt="Course Management" class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                    <h5 class="card-title">Course Management</h5>
+                    <p class="card-text">Create, manage, and organize courses with lessons, materials, and quizzes.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=300&h=200&fit=crop" alt="Interactive Quizzes" class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                    <h5 class="card-title">Interactive Quizzes</h5>
+                    <p class="card-text">Take MCQ quizzes with automatic evaluation and instant feedback.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop" alt="Progress Tracking" class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                    <h5 class="card-title">Progress Tracking</h5>
+                    <p class="card-text">Monitor your learning progress with detailed analytics and reports.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop" alt="User Management" class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                    <h5 class="card-title">User Management</h5>
+                    <p class="card-text">Role-based access for Admin, Instructors, and Students.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=300&h=200&fit=crop" alt="File Management" class="img-fluid rounded mb-3" style="height: 150px; width: 100%; object-fit: cover;">
+                    <h5 class="card-title">File Management</h5>
+                    <p class="card-text">Upload and manage course materials including PDFs, videos, and documents.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-transparent">
+                    <div class="card-body">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=200&h=150&fit=crop" alt="Students" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        <h3 class="text-primary fw-bold">1000+</h3>
+                        <p class="text-muted">Active Students</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-transparent">
+                    <div class="card-body">
+                        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=150&fit=crop" alt="Courses" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        <h3 class="text-success fw-bold">50+</h3>
+                        <p class="text-muted">Available Courses</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-transparent">
+                    <div class="card-body">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=150&fit=crop" alt="Instructors" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        <h3 class="text-info fw-bold">25+</h3>
+                        <p class="text-muted">Expert Instructors</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0 bg-transparent">
+                    <div class="card-body">
+                        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=200&h=150&fit=crop" alt="Certificates" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        <h3 class="text-warning fw-bold">95%</h3>
+                        <p class="text-muted">Success Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container text-center text-white">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="mb-4">Ready to Start Learning?</h2>
+                <p class="lead mb-4">Join thousands of students who are already advancing their careers with our comprehensive courses.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a asp-controller="Home" asp-action="Courses" class="btn btn-light btn-lg">
+                        <i class="fas fa-book me-2"></i>Browse Courses
+                    </a>
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Sign Up Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,90 @@
+@model Quiz
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">@Model.Title</h2>
+                <small class="text-muted">
+                    <i class="fas fa-book me-1"></i>@Model.Course.Title
+                </small>
+            </div>
+            <div class="card-body">
+                <p>@Model.Description</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="fas fa-clock me-2"></i>Time Limit</h6>
+                                <p class="mb-0">@Model.TimeLimitMinutes minutes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6><i class="fas fa-redo me-2"></i>Max Attempts</h6>
+                                <p class="mb-0">@Model.MaxAttempts attempts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6><i class="fas fa-question-circle me-2"></i>Questions (@Model.Questions.Count)</h6>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var question in Model.Questions.OrderBy(q => q.Order))
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>@question.QuestionText</span>
+                                    <small class="text-muted">@question.Points point(s)</small>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Quiz Actions</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.IsEnrolled == true)
+                {
+                    <div class="d-grid">
+                        <a asp-action="Take" asp-route-id="@Model.Id" class="btn btn-success">
+                            <i class="fas fa-play me-2"></i>Start Quiz
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        You must be enrolled in this course to take the quiz.
+                    </div>
+                }
+                
+                @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+                {
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a asp-action="AddQuestion" asp-route-quizId="@Model.Id" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Add Question
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

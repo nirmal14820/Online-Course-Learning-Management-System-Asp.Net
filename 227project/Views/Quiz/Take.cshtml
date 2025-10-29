@@ -1,0 +1,133 @@
+@model Quiz
+
+@{
+    ViewData["Title"] = "Take Quiz - " + Model.Title;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">@Model.Title</h3>
+                    <div class="text-end">
+                        <div id="timer" class="h4 mb-0"></div>
+                        <small>Time Remaining</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="quizForm" asp-action="SubmitQuiz" method="post">
+                    <input type="hidden" name="attemptId" value="@ViewBag.AttemptId" />
+                    
+                    @for (int i = 0; i < Model.Questions.Count; i++)
+                    {
+                        var question = Model.Questions.OrderBy(q => q.Order).ElementAt(i);
+                        <div class="question-card mb-4 p-3 border rounded">
+                            <h5 class="mb-3">
+                                Question @(i + 1) of @Model.Questions.Count
+                                <span class="badge bg-secondary ms-2">@question.Points point(s)</span>
+                            </h5>
+                            
+                            <p class="mb-4">@question.QuestionText</p>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="answers[@question.Id]" id="q@(question.Id)_a" value="A">
+                                <label class="form-check-label" for="q@(question.Id)_a">
+                                    A) @question.OptionA
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="answers[@question.Id]" id="q@(question.Id)_b" value="B">
+                                <label class="form-check-label" for="q@(question.Id)_b">
+                                    B) @question.OptionB
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="answers[@question.Id]" id="q@(question.Id)_c" value="C">
+                                <label class="form-check-label" for="q@(question.Id)_c">
+                                    C) @question.OptionC
+                                </label>
+                            </div>
+                            
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="answers[@question.Id]" id="q@(question.Id)_d" value="D">
+                                <label class="form-check-label" for="q@(question.Id)_d">
+                                    D) @question.OptionD
+                                </label>
+                            </div>
+                        </div>
+                    }
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Are you sure you want to submit your quiz?')">
+                            <i class="fas fa-check me-2"></i>Submit Quiz
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Timer functionality
+        let timeLeft = @ViewBag.TimeLimit * 60; // Convert minutes to seconds
+        const timerElement = document.getElementById('timer');
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                alert('Time is up! Your quiz will be submitted automatically.');
+                document.getElementById('quizForm').submit();
+            } else {
+                timeLeft--;
+            }
+        }
+        
+        // Update timer every second
+        setInterval(updateTimer, 1000);
+        
+        // Auto-save answers (optional feature)
+        function saveAnswers() {
+            const answers = {};
+            document.querySelectorAll('input[type="radio"]:checked').forEach(input => {
+                answers[input.name] = input.value;
+            });
+            localStorage.setItem('quiz_@Model.Id', JSON.stringify(answers));
+        }
+        
+        // Load saved answers
+        function loadAnswers() {
+            const savedAnswers = localStorage.getItem('quiz_@Model.Id');
+            if (savedAnswers) {
+                const answers = JSON.parse(savedAnswers);
+                Object.keys(answers).forEach(name => {
+                    const input = document.querySelector(`input[name="${name}"][value="${answers[name]}"]`);
+                    if (input) {
+                        input.checked = true;
+                    }
+                });
+            }
+        }
+        
+        // Save answers when radio buttons change
+        document.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', saveAnswers);
+        });
+        
+        // Load saved answers on page load
+        loadAnswers();
+        
+        // Clear saved answers on form submit
+        document.getElementById('quizForm').addEventListener('submit', function() {
+            localStorage.removeItem('quiz_@Model.Id');
+        });
+    </script>
+}

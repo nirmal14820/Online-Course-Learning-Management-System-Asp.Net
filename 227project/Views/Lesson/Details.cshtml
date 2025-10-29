@@ -1,0 +1,114 @@
+@model Lesson
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">@Model.Title</h2>
+                <small class="text-muted">
+                    <i class="fas fa-book me-1"></i>@Model.Course.Title
+                </small>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                {
+                    <div class="mb-4">
+                        <h5><i class="fas fa-play-circle me-2"></i>Video Lesson</h5>
+                        <div class="ratio ratio-16x9">
+                            <iframe src="@Model.VideoUrl" title="@Model.Title" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                }
+                
+                <h5><i class="fas fa-file-text me-2"></i>Lesson Content</h5>
+                <div class="lesson-content">
+                    @Html.Raw(Model.Content.Replace("\n", "<br>"))
+                </div>
+                
+                @if (User.IsInRole("Student") && ViewBag.IsEnrolled == true)
+                {
+                    <div class="mt-4">
+                        <button id="markCompleteBtn" class="btn btn-success @(ViewBag.IsCompleted == true ? "disabled" : "")" 
+                                @(ViewBag.IsCompleted == true ? "disabled" : "")>
+                            <i class="fas fa-check me-2"></i>
+                            @(ViewBag.IsCompleted == true ? "Completed" : "Mark as Complete")
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Lesson Navigation</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Course
+                    </a>
+                    <a asp-controller="Lesson" asp-action="Index" asp-route-courseId="@Model.CourseId" class="btn btn-outline-secondary">
+                        <i class="fas fa-list me-2"></i>All Lessons
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        @if (User.IsInRole("Admin") || (User.IsInRole("Instructor") && Model.Course.InstructorId == User.Identity.Name))
+        {
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Instructor Actions</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-edit me-2"></i>Edit Lesson
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('markCompleteBtn')?.addEventListener('click', function() {
+            if (!this.disabled) {
+                fetch('@Url.Action("MarkComplete", "Lesson", new { id = Model.Id, courseId = Model.CourseId })', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.innerHTML = '<i class="fas fa-check me-2"></i>Completed';
+                        this.classList.add('disabled');
+                        this.disabled = true;
+                        
+                        // Show success message
+                        const alert = document.createElement('div');
+                        alert.className = 'alert alert-success alert-dismissible fade show';
+                        alert.innerHTML = `
+                            <i class="fas fa-check-circle me-2"></i>Lesson marked as complete!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.querySelector('.card-body').insertBefore(alert, document.querySelector('.card-body').firstChild);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    </script>
+}

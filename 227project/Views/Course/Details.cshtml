@@ -1,0 +1,143 @@
+@model Course
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Title" style="height: 300px; object-fit: cover;" onerror="this.style.display='none';">
+            }
+            <div class="card-header">
+                <h2 class="mb-0">@Model.Title</h2>
+                <small class="text-muted">
+                    <i class="fas fa-user me-1"></i>@Model.Instructor.FirstName @Model.Instructor.LastName
+                    <span class="ms-3">
+                        <i class="fas fa-tag me-1"></i>@Model.Category
+                    </span>
+                </small>
+            </div>
+            <div class="card-body">
+                <h5>Description</h5>
+                <p>@Model.Description</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-list me-2"></i>Lessons (@Model.Lessons.Count)</h6>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var lesson in Model.Lessons.OrderBy(l => l.Order))
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a asp-controller="Lesson" asp-action="Details" asp-route-id="@lesson.Id" class="text-decoration-none">
+                                        @lesson.Title
+                                    </a>
+                                    <small class="text-muted">@lesson.Order</small>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-question-circle me-2"></i>Quizzes (@Model.Quizzes.Count)</h6>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var quiz in Model.Quizzes)
+                            {
+                                <li class="list-group-item">
+                                    <a asp-controller="Quiz" asp-action="Details" asp-route-id="@quiz.Id" class="text-decoration-none">
+                                        @quiz.Title
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-file me-2"></i>Materials (@Model.Materials.Count)</h6>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var material in Model.Materials)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@material.Title</span>
+                                    <small class="text-muted">@material.FileType</small>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Course Actions</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.IsEnrolled == true)
+                {
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Lesson" asp-action="Index" asp-route-courseId="@Model.Id" class="btn btn-primary">
+                            <i class="fas fa-play me-2"></i>Start Learning
+                        </a>
+                        <a asp-controller="Dashboard" asp-action="Progress" asp-route-courseId="@Model.Id" class="btn btn-outline-primary">
+                            <i class="fas fa-chart-line me-2"></i>View Progress
+                        </a>
+                        <a asp-action="Unenroll" asp-route-id="@Model.Id" class="btn btn-outline-danger" 
+                           onclick="return confirm('Are you sure you want to unenroll from this course?')">
+                            <i class="fas fa-times me-2"></i>Unenroll
+                        </a>
+                    </div>
+                }
+                else if (User.IsInRole("Student"))
+                {
+                    <div class="d-grid">
+                        <a asp-action="Enroll" asp-route-id="@Model.Id" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>Enroll in Course
+                        </a>
+                    </div>
+                }
+                
+                @if (User.IsInRole("Admin") || (User.IsInRole("Instructor") && Model.InstructorId == User.Identity.Name))
+                {
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+                            <i class="fas fa-edit me-2"></i>Edit Course
+                        </a>
+                        <a asp-controller="Lesson" asp-action="Create" asp-route-courseId="@Model.Id" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Add Lesson
+                        </a>
+                        <a asp-controller="Quiz" asp-action="Create" asp-route-courseId="@Model.Id" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Add Quiz
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Course Statistics</h6>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h5 class="text-primary">@Model.Enrollments.Count</h5>
+                        <small class="text-muted">Students</small>
+                    </div>
+                    <div class="col-6">
+                        <h5 class="text-success">@Model.Lessons.Count</h5>
+                        <small class="text-muted">Lessons</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
